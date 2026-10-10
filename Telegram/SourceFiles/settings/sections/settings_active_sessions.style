@@ -1,0 +1,20 @@
+/*
+This file is part of Telegram Desktop,
+the official desktop application for the Telegram messaging service.
+
+For license and copyright information please follow this link:
+https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
+*/
+using "settings/settings.style";
+
+sessionLocationTop: 54px;
+sessionCurrentSkip: 8px;
+sessionIconWindows: icon{{ "settings/devices/device_desktop_win", historyPeerUserpicFg }};
+sessionIconMac: icon{{ "settings/devices/device_desktop_mac", historyPeerUserpicFg }};
+sessionIconUbuntu: icon{{ "settings/devices/device_linux_ubuntu", historyPeerUserpicFg }};
+sessionIconLinux: icon{{ "settings/devices/device_linux", historyPeerUserpicFg }};
+sessionIconiPad: icon{{ "settings/devices/device_tablet_ios", historyPeerUserpicFg }};
+sessionValueLabel: FlatLabel(defaultFlatLabel) {
+	textFg: windowSubTextFg;
+}
+sessionValueIconPosition: point(20px, 9px);
