@@ -155,6 +155,15 @@ jobs:
         shell: bash
         run: find TBuild/Libraries '(' '(' ! '(' -name '*.lib' -o -name '*.a' -o -name '*.exe' -o -name '*.h' -o -name '*.hpp' -o -name '*.inc' -o -name '*.cmake' -o -path '*/include/*'  -o -path '*/objects-*' -o -path '*/cache_keys/*' -o -path '*/patches/*' -o -path '*/tdesktop_rust/out/*' ')' -type f ')' -o -empty ')' -delete
 
+      - name: Boost pagefile (C1060 OOM guard).
+        shell: pwsh
+        run: |
+          Set-CimInstance Win32_ComputerSystem AutomaticManagedPagefile=$false
+          $pf = Get-CimInstance Win32_PageFileSetting | Select-Object -First 1
+          if ($pf) { $pf | Set-CimInstance -Arguments @{InitialSize=16384; MaximumSize=32768} }
+          else { New-CimInstance Win32_PageFileSetting -Arguments @{Name="D:\\pagefile.sys"; InitialSize=16384; MaximumSize=32768} | Out-Null }
+          Get-CimInstance Win32_PageFileSetting | Format-Table Name,InitialSize,MaximumSize -AutoSize
+
       - name: materialgram build.
         if: env.ONLY_CACHE == 'false'
         run: |
@@ -166,6 +175,7 @@ jobs:
           %TDESKTOP_BUILD_API% ^
           -D CMAKE_CONFIGURATION_TYPES=MinSizeRel ^
           -D CMAKE_MSVC_DEBUG_INFORMATION_FORMAT= ^
+          -D CMAKE_CXX_FLAGS="/Zm2000" ^
           -D DESKTOP_APP_DISABLE_AUTOUPDATE=OFF ^
           %TDESKTOP_BUILD_DEFINE%
 
